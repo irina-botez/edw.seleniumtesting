@@ -18,7 +18,26 @@ This package requires **Python 3.5**!
 Usage
 -----
 
-To run the ``test1``, ``test2`` and ``test3`` tests in Firefox,
+By itself this product doesn't do anything. You must provide test suites to be run in the form of pkg_resource plugins.
+The ``edw.seleniumtesting.sample`` suite is registered in such a way to provide an example.
+
+In your own package, after writing the suite (refer to ``edw.seleniumtesting.sample``) you must the following to the
+``setup.py`` of your package (the sample suite is registered in the same way): ::
+
+    entry_points={
+        'edw.seleniumtesting': [
+            'my.package.test1 = my.package.test1:suite'
+            'my.package.test2 = my.package.test2:suite'
+            'my.package.test3 = my.package.test3:suite'
+            [...]
+        ]
+    }
+
+and ``pip install my.package``. Modifying the list of tests defined in the ``entry_points`` will require a
+re-installation of your package (re-run pip/setuptools/buildout).
+
+
+To run the ``my.package.test1``, ``my.package.test2`` and ``my.package.test3`` tests in Firefox,
 specifying the path to ``geckodriver`` at the default ``1024x768`` resolution: ::
 
     $ seleniumtesting -v -B firefox -P /usr/bin/geckodriver https://localhost test1 test2 test3
