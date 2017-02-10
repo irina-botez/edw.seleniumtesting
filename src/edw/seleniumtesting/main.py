@@ -1,8 +1,5 @@
 import unittest
 
-from zope.component import getUtility
-
-from edw.seleniumtesting import ITestSuite
 from edw.seleniumtesting import common
 from edw.seleniumtesting import util
 
@@ -34,7 +31,7 @@ def run_cli():
 
     for test_name in args.test:
         util.validate_test_name(test_name)
-        suite = getUtility(ITestSuite, name=test_name)
+        suite = util.ARG_TESTS[test_name]
 
         run(base_url=args.url,
             suite=suite,

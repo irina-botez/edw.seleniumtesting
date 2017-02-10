@@ -37,9 +37,11 @@ setup(
     install_requires=[
         'setuptools',
         'selenium>=3.0.2',
-        'zope.component',
     ],
     entry_points={
-        'console_scripts': ['seleniumtesting = edw.seleniumtesting.main:run_cli']
+        'console_scripts': ['seleniumtesting = edw.seleniumtesting.main:run_cli'],
+        'edw.seleniumtesting': [
+            'edw.seleniumtesting.sample = edw.seleniumtesting.sample:suite'
+        ]
     }
 )

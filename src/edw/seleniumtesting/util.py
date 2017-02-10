@@ -1,21 +1,7 @@
 import argparse
-
-from zope.component import queryUtility
-from zope.component import getAllUtilitiesFor
+from pkg_resources import iter_entry_points
 
 from selenium import webdriver
-
-from edw.seleniumtesting import indicators
-from edw.seleniumtesting import charts
-from edw.seleniumtesting import dataset
-from edw.seleniumtesting import ITestSuite
-
-
-ARG_TESTS = {
-    'indicators': indicators.suite,
-    'charts': charts.suite,
-    'dataset': dataset.suite,
-}
 
 
 DRIVERS = {
@@ -34,23 +20,23 @@ MSG_UNKNOWN_TEST = (
 )
 
 
+ARG_TESTS = {}
+
+for entry_point in iter_entry_points(group='edw.seleniumtesting', name=None):
+    ARG_TESTS[entry_point.name] = entry_point.load()
+
+
 def get_browser(name, path=None):
     browser = DRIVERS[name]
     return browser(executable_path=path) if path else browser()
 
 
 def validate_test_name(test_name):
-    suite = queryUtility(ITestSuite, name=test_name)
-    known_tests = getAllUtilitiesFor(ITestSuite)
-    assert suite, MSG_UNKNOWN_TEST.format(
-        test_name, known_tests=', '.join([
-            s.utility_name for s in known_tests]
-        )
-    )
+    assert test_name in ARG_TESTS, MSG_UNKNOWN_TEST.format(
+        test_name, known_tests=', '.join(ARG_TESTS.keys()))
 
 
 def build_cli_arguments() -> argparse.ArgumentParser:
-    known_tests = [s.utility_name for s in getAllUtilitiesFor(ITestSuite)]
     parser = argparse.ArgumentParser(
         description=(
             'Run tests on websites.\n'
@@ -65,10 +51,9 @@ def build_cli_arguments() -> argparse.ArgumentParser:
         help='Site url, eg: https://digital-agenda-data.eu.'
     )
     parser.add_argument(
-        'test', nargs='*', type=str,
-        default=known_tests,
+        'test', nargs='*', type=str, default=ARG_TESTS.keys(),
         help='Test names, one or more of: "{}". Default: all'.format(
-            ', '.join([s.utility_name for s in known_tests])
+            ', '.join(ARG_TESTS.keys())
         )
     )
     parser.add_argument('-v', '--verbose', action='count', default=1)
