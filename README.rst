@@ -40,7 +40,7 @@ re-installation of your package (re-run pip/setuptools/buildout).
 To run the ``my.package.test1``, ``my.package.test2`` and ``my.package.test3`` tests in Firefox,
 specifying the path to ``geckodriver`` at the default ``1024x768`` resolution: ::
 
-    $ seleniumtesting -v -B firefox -P /usr/bin/geckodriver https://localhost test1 test2 test3
+    $ seleniumtesting -v -B firefox -P /usr/bin/geckodriver https://localhost my.package.test1 my.package.test2 my.package.test3
 
 
 To run all tests in phantomjs in glorious 4K resolution: ::
