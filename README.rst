@@ -26,9 +26,9 @@ In your own package, after writing the suite (refer to ``edw.seleniumtesting.sam
 
     entry_points={
         'edw.seleniumtesting': [
-            'my.package.test1 = my.package.test1:suite'
-            'my.package.test2 = my.package.test2:suite'
-            'my.package.test3 = my.package.test3:suite'
+            'my.package.test1 = my.package.test1:suite',
+            'my.package.test2 = my.package.test2:suite',
+            'my.package.test3 = my.package.test3:suite',
             [...]
         ]
     }
